@@ -1,0 +1,179 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --orange: #ff4d00;
+  --orange-light: #ff7a33;
+  --ink: #0a0a0c;
+  --cream: #fbf2e6;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Les ancres atterrissent sous le header flottant, pas dessous. */
+  scroll-padding-top: 6.5rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--ink);
+  color: var(--cream);
+  font-feature-settings: "ss01", "cv01";
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--orange);
+  color: #fff;
+}
+
+/* Ambient orange aurora that lives behind the whole page */
+.aurora-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 50% at 15% 0%, rgba(255, 77, 0, 0.28), transparent 60%),
+    radial-gradient(50% 45% at 85% 15%, rgba(255, 122, 51, 0.2), transparent 55%),
+    radial-gradient(55% 50% at 50% 100%, rgba(255, 77, 0, 0.16), transparent 60%);
+}
+
+@layer components {
+  .container-custom {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12;
+  }
+
+  /* ----- Liquid glass surfaces (Apple-like) -----
+     Perf : le backdrop-filter est volontairement réservé au header flottant
+     (.glass-blur). Sur le fond quasi-noir, les cartes rendent le même effet
+     "verre" via transparence + bordure + reflet, SANS recalculer un flou à
+     chaque frame de scroll — d'où un défilement parfaitement fluide. */
+  .glass {
+    @apply relative rounded-3xl border border-white/10 bg-white/[0.06];
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.18),
+      inset 0 -1px 0 0 rgba(255, 255, 255, 0.04),
+      0 24px 60px -28px rgba(0, 0, 0, 0.75);
+  }
+
+  /* Alias historique (marquee, bulle flottante) — identique à .glass. */
+  .glass-flat {
+    @apply glass;
+  }
+
+  /* Vrai verre frosted : UNIQUEMENT le header flottant, qui passe au-dessus
+     du contenu pendant le scroll. Un seul élément => coût négligeable. */
+  .glass-blur {
+    @apply relative rounded-3xl border border-white/10 bg-white/[0.07] backdrop-blur-xl;
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.18),
+      0 24px 60px -28px rgba(0, 0, 0, 0.75);
+  }
+
+  /* Specular highlight that gives the "bubble of glass" sheen */
+  .glass-sheen::before {
+    content: "";
+    @apply pointer-events-none absolute inset-0 rounded-[inherit];
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.22) 0%,
+      rgba(255, 255, 255, 0.04) 28%,
+      transparent 55%
+    );
+  }
+
+  .glass-orange {
+    @apply relative rounded-3xl border border-orange/30;
+    background:
+      linear-gradient(180deg, rgba(255, 122, 51, 0.16), rgba(255, 77, 0, 0.06)),
+      rgba(255, 255, 255, 0.04);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.22),
+      0 30px 70px -30px rgba(255, 77, 0, 0.55);
+  }
+
+  /* ----- Buttons ----- */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-orange px-7 py-3.5 text-sm font-semibold text-white shadow-[0_10px_30px_-8px_rgba(255,77,0,0.7)] transition-all duration-300 hover:bg-orange-dark hover:-translate-y-0.5;
+  }
+
+  .btn-glass {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/[0.07] px-7 py-3.5 text-sm font-semibold text-cream transition-all duration-300 hover:bg-white/[0.14] hover:-translate-y-0.5;
+  }
+
+  /* ----- Typography ----- */
+  .display {
+    @apply font-display uppercase leading-[0.92] tracking-tight;
+  }
+  .heading-xl {
+    @apply display text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem];
+  }
+  .heading-lg {
+    @apply display text-4xl sm:text-5xl md:text-6xl;
+  }
+  .heading-md {
+    @apply display text-3xl sm:text-4xl;
+  }
+  .eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full border border-orange/30 bg-orange/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-orange-light;
+  }
+  .script-accent {
+    @apply font-script text-orange-light;
+  }
+
+  .section-padding {
+    @apply py-24 md:py-32;
+  }
+
+  .link-muted {
+    @apply text-cream/60 transition-colors duration-200 hover:text-cream;
+  }
+}
+
+/* Pistes animées : promotion sur le compositeur pour un défilement sans à-coups */
+.gpu {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Mask for marquee fade edges */
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-marquee-rev,
+  .animate-float,
+  .animate-glow-pulse {
+    animation: none !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
