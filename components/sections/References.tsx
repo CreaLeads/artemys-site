@@ -27,7 +27,7 @@ function Row({ reverse = false }: { reverse?: boolean }) {
             key={`${name}-${i}`}
             className="glass-flat flex h-20 shrink-0 items-center justify-center whitespace-nowrap rounded-2xl px-8"
           >
-            <span className="text-outline-orange font-display text-xl uppercase tracking-wide text-cream/80">
+            <span className="font-display text-xl uppercase tracking-wide text-orange">
               {name}
             </span>
           </div>
