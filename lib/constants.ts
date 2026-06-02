@@ -22,14 +22,22 @@ export const COMPANY = {
   catalogueUrl: "https://www.calameo.com/books/0081777332f587adffc0d",
 };
 
+// Liens "/#ancre" pour fonctionner aussi depuis la page /portfolio.
 export const NAV_LINKS = [
-  { label: "Packs", href: "#packs" },
-  { label: "Abonnements", href: "#abonnements" },
-  { label: "Pôles", href: "#poles" },
-  { label: "Prestations", href: "#prestations" },
-  { label: "Références", href: "#references" },
-  { label: "Contact", href: "#contact" },
+  { label: "Packs", href: "/#packs" },
+  { label: "Abonnements", href: "/abonnements" },
+  { label: "Pôles", href: "/#poles" },
+  { label: "Prestations", href: "/prestations" },
+  { label: "Portfolio", href: "/portfolio" },
+  { label: "Contact", href: "/#contact" },
 ];
+
+// Partenaires affichés en pied de page.
+// TODO : confirmer les URLs réelles (CreaLeads + Atelier MLM).
+export const PARTNERS = {
+  crealeadsUrl: "https://crealeads.fr",
+  atelierMlmUrl: "", // laissé vide => texte simple tant que l'URL n'est pas fournie
+};
 
 export const HERO = {
   eyebrow: "Agence de communication",
@@ -37,7 +45,7 @@ export const HERO = {
   subtitle:
     "De la création graphique à la visibilité terrain : logo, web, print, signalétique, textile et goodies. Une agence, tous vos supports — en packs clés en main ou en abonnement mensuel.",
   primaryCta: { label: "Voir les packs", href: "#packs" },
-  secondaryCta: { label: "Les abonnements", href: "#abonnements" },
+  secondaryCta: { label: "Les abonnements", href: "/abonnements" },
 };
 
 export const STATS = [
@@ -342,25 +350,138 @@ export const PRESTATIONS: PrestaCategory[] = [
 /*  et basculer le composant References sur des <Image>.                */
 /* ------------------------------------------------------------------ */
 
+// Clients réels (bandeau défilant). Logos optionnels à déposer plus tard
+// dans /public/clients/ — pour l'instant on affiche les noms.
 export const CLIENTS: string[] = [
-  "Client 01",
-  "Client 02",
-  "Client 03",
-  "Client 04",
-  "Client 05",
-  "Client 06",
-  "Client 07",
-  "Client 08",
-  "Client 09",
-  "Client 10",
-  "Client 11",
-  "Client 12",
+  "CL Training",
+  "Sport-Event",
+  "La Sodem",
+  "Le Buron du Prat de Bouc",
+  "La Grange des Roches",
+  "Les Créas de Sarah",
+  "Instant Rénov",
+  "Gris BTP",
+  "Atelier MLM",
+  "La Bonne Occase",
+  "Les Pains Jenyo",
+  "La Carrosserie du Plomb",
+  "Le Plomb du Cantal",
+  "FPPC",
+  "Au Bout de la Moustache",
+  "NS Auto",
+  "Wonder Tattoo",
+  "Gendarmerie Nationale",
+  "Piscine O'Claire",
+  "Run Club by CL Training",
 ];
 
-export const TESTIMONIALS: { name: string; role: string; text: string }[] = [
+/* ------------------------------------------------------------------ */
+/*  PORTFOLIO (page /portfolio)                                         */
+/*  TODO : remplacer par les vrais projets/visuels du Portfolio 2026.   */
+/*  Déposer les images dans /public/portfolio/ et ajouter `image:`.     */
+/* ------------------------------------------------------------------ */
+
+export type CaseStudy = {
+  id: string;
+  client: string;
+  intro: string;
+  services: string[];
+  images?: string[]; // chemins /portfolio/... dans /public — à fournir
+};
+
+export const PORTFOLIO: CaseStudy[] = [
   {
-    name: "Témoignage client",
-    role: "À compléter",
-    text: "Emplacement réservé pour un avis client. Transmettez vos témoignages et je les intègre ici.",
+    id: "instant-renov",
+    client: "Instant Rénov",
+    intro:
+      "Accompagnement complet dans la création de l'identité visuelle : logo, cartes de visite, site web et covering des véhicules. Chaque élément a été pensé pour offrir une image cohérente et professionnelle, renforcer leur visibilité et valoriser leur activité auprès de leurs clients.",
+    services: [
+      "Logo",
+      "Identité visuelle",
+      "Cartes de visite",
+      "Site web",
+      "Covering véhicule",
+    ],
+    images: [],
+  },
+  {
+    id: "sport-event",
+    client: "Sport-Event",
+    intro:
+      "Création de l'identité visuelle complète : logo, cartes de visite, flyers pour événements et site web. Nous avons aussi créé des goodies personnalisés (pulls, t-shirts, tasses) afin de renforcer leur image auprès des participants et partenaires.",
+    services: [
+      "Logo",
+      "Identité visuelle",
+      "Cartes de visite",
+      "Flyers",
+      "Site web",
+      "Goodies",
+    ],
+    images: [],
+  },
+];
+
+/* Avis Google — affichés "en dur" pour l'instant.
+ * TODO : remplacer la note, le nombre et les avis par les vrais (page Google).
+ */
+export const GOOGLE = {
+  rating: 4.9,
+  reviewsCount: 20,
+  reviewsUrl: "https://www.google.com/search?q=agence+art%C3%A9mys",
+};
+
+export const TESTIMONIALS: {
+  name: string;
+  role: string;
+  text: string;
+  rating?: number;
+}[] = [
+  {
+    name: "Maxime Hatrel",
+    role: "Avis Google",
+    rating: 5,
+    text: "Très bonne agence de communication ! À l'écoute des attentes et très rapide ! Je recommande ! 😉",
+  },
+  {
+    name: "Sarah Torres",
+    role: "Avis Google",
+    rating: 5,
+    text: "J'ai fait appel à l'agence Artémys pour ma micro-entreprise : création de logo, visuels, image de marque. J'ai aussi commandé mes cartes de visite et un roll-up qui fait un très bel effet sur les marchés !",
+  },
+  {
+    name: "Cédric Lacour",
+    role: "Avis Google",
+    rating: 5,
+    text: "Très professionnel et rapide !! Je conseille vivement !",
+  },
+  {
+    name: "Raphaël Gil",
+    role: "Avis Google",
+    rating: 5,
+    text: "Agence très sérieuse, avec un travail appliqué fait avec précision. Je conseille fortement.",
+  },
+  {
+    name: "Julie Blanc",
+    role: "Avis Google",
+    rating: 5,
+    text: "Très bonne expérience avec Artémys, vous pouvez y aller les yeux fermés. Je recommande.",
+  },
+  {
+    name: "Anthony Mbengi",
+    role: "Avis Google",
+    rating: 4,
+    text: "Très bonne agence, compréhensif et à l'écoute. Je recommande fortement !",
+  },
+  {
+    name: "Jen 84",
+    role: "Avis Google",
+    rating: 5,
+    text: "Excellent travail, soigné. Personne très professionnelle.",
+  },
+  {
+    name: "Mat Paris Kileur",
+    role: "Avis Google",
+    rating: 5,
+    text: "Très professionnel dans son travail, je recommande.",
   },
 ];

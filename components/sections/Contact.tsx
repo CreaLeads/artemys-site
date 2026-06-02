@@ -29,14 +29,15 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="section-padding">
+    <section id="contact" className="section-padding relative overflow-hidden">
+      <div className="section-glow" aria-hidden />
       <div className="container-custom">
         <div className="glass glass-sheen grid gap-10 rounded-[2.5rem] p-8 sm:p-12 lg:grid-cols-2">
           {/* Colonne infos */}
           <Reveal>
             <span className="eyebrow">Contact</span>
             <h2 className="heading-lg mt-5 text-cream">
-              Parlons de votre <span className="text-orange">projet</span>
+              Parlons de votre <span className="text-gradient-orange">projet</span>
             </h2>
             <p className="mt-4 text-cream/70">
               Un pack, un abonnement ou une prestation précise ? Dites-nous où vous
@@ -87,7 +88,7 @@ export function Contact() {
                 </label>
                 <select
                   name="subject"
-                  className="w-full rounded-2xl border border-white/15 bg-white/[0.06] px-4 py-3 text-cream outline-none transition focus:border-orange"
+                  className="w-full rounded-2xl border border-glass/15 bg-glass/[0.06] px-4 py-3 text-cream outline-none transition focus:border-orange"
                 >
                   <option className="bg-ink">Un pack (Start / Premium / 360°)</option>
                   <option className="bg-ink">Un abonnement (Infinity / Pro / Ultra)</option>
@@ -102,7 +103,7 @@ export function Contact() {
                 <textarea
                   name="message"
                   rows={4}
-                  className="w-full resize-none rounded-2xl border border-white/15 bg-white/[0.06] px-4 py-3 text-cream outline-none transition placeholder:text-cream/30 focus:border-orange"
+                  className="w-full resize-none rounded-2xl border border-glass/15 bg-glass/[0.06] px-4 py-3 text-cream outline-none transition placeholder:text-cream/30 focus:border-orange"
                   placeholder="Décrivez votre projet en quelques mots…"
                 />
               </div>
@@ -153,7 +154,7 @@ function Field({
         name={name}
         type={type}
         required={required}
-        className="w-full rounded-2xl border border-white/15 bg-white/[0.06] px-4 py-3 text-cream outline-none transition focus:border-orange"
+        className="w-full rounded-2xl border border-glass/15 bg-glass/[0.06] px-4 py-3 text-cream outline-none transition focus:border-orange"
       />
     </div>
   );

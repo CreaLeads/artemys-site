@@ -5,8 +5,23 @@
 :root {
   --orange: #ff4d00;
   --orange-light: #ff7a33;
-  --ink: #0a0a0c;
-  --cream: #fbf2e6;
+  /* Tokens de thème (format R G B pour rgb(var(--x) / alpha)). Défaut = SOMBRE. */
+  --bg: 10 10 12; /* #0A0A0C */
+  --fg: 251 242 230; /* #FBF2E6 crème */
+  --glass: 255 255 255; /* teinte verre = blanc */
+  --aurora-1: 255 77 0;
+  --aurora-2: 255 122 51;
+  --aurora-a: 0.28; /* intensité de l'aura */
+  --aurora-b: 0.2;
+  --aurora-c: 0.16;
+}
+
+/* ☀️ THÈME CLAIR (test, façon agenceshort.fr) — activé par .theme-light sur <html>.
+   Pour revenir au sombre : retirer la classe theme-light (cf. THEME.md). */
+.theme-light {
+  --bg: 245 244 246; /* #F5F4F6 gris clair (pas blanc pur) */
+  --fg: 21 22 26; /* #15161A encre */
+  --glass: 21 22 26; /* teinte verre = encre (faibles opacités) */
 }
 
 html {
@@ -15,11 +30,15 @@ html {
   scroll-padding-top: 6.5rem;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Le fond de base vit sur <html> pour que l'aura orange (.aurora-bg,
+     z-index:-1, enfant du body) s'affiche par-dessus — sinon le fond du
+     body la recouvrait. */
+  background: rgb(var(--bg));
 }
 
 body {
-  background: var(--ink);
-  color: var(--cream);
+  background: transparent;
+  color: rgb(var(--fg));
   font-feature-settings: "ss01", "cv01";
   overflow-x: hidden;
 }
@@ -36,9 +55,21 @@ body {
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(60% 50% at 15% 0%, rgba(255, 77, 0, 0.28), transparent 60%),
-    radial-gradient(50% 45% at 85% 15%, rgba(255, 122, 51, 0.2), transparent 55%),
-    radial-gradient(55% 50% at 50% 100%, rgba(255, 77, 0, 0.16), transparent 60%);
+    radial-gradient(
+      60% 50% at 15% 0%,
+      rgb(var(--aurora-1) / var(--aurora-a)),
+      transparent 60%
+    ),
+    radial-gradient(
+      50% 45% at 85% 15%,
+      rgb(var(--aurora-2) / var(--aurora-b)),
+      transparent 55%
+    ),
+    radial-gradient(
+      55% 50% at 50% 100%,
+      rgb(var(--aurora-1) / var(--aurora-c)),
+      transparent 60%
+    );
 }
 
 @layer components {
@@ -52,7 +83,7 @@ body {
      "verre" via transparence + bordure + reflet, SANS recalculer un flou à
      chaque frame de scroll — d'où un défilement parfaitement fluide. */
   .glass {
-    @apply relative rounded-3xl border border-white/10 bg-white/[0.06];
+    @apply relative rounded-3xl border border-glass/10 bg-glass/[0.06];
     box-shadow:
       inset 0 1px 0 0 rgba(255, 255, 255, 0.18),
       inset 0 -1px 0 0 rgba(255, 255, 255, 0.04),
@@ -67,7 +98,7 @@ body {
   /* Vrai verre frosted : UNIQUEMENT le header flottant, qui passe au-dessus
      du contenu pendant le scroll. Un seul élément => coût négligeable. */
   .glass-blur {
-    @apply relative rounded-3xl border border-white/10 bg-white/[0.07] backdrop-blur-xl;
+    @apply relative rounded-3xl border border-glass/10 bg-glass/[0.07] backdrop-blur-xl;
     box-shadow:
       inset 0 1px 0 0 rgba(255, 255, 255, 0.18),
       0 24px 60px -28px rgba(0, 0, 0, 0.75);
@@ -89,7 +120,7 @@ body {
     @apply relative rounded-3xl border border-orange/30;
     background:
       linear-gradient(180deg, rgba(255, 122, 51, 0.16), rgba(255, 77, 0, 0.06)),
-      rgba(255, 255, 255, 0.04);
+      rgb(var(--glass) / 0.04);
     box-shadow:
       inset 0 1px 0 0 rgba(255, 255, 255, 0.22),
       0 30px 70px -30px rgba(255, 77, 0, 0.55);
@@ -97,11 +128,11 @@ body {
 
   /* ----- Buttons ----- */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-orange px-7 py-3.5 text-sm font-semibold text-white shadow-[0_10px_30px_-8px_rgba(255,77,0,0.7)] transition-all duration-300 hover:bg-orange-dark hover:-translate-y-0.5;
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-orange-light to-orange-dark px-7 py-3.5 text-sm font-semibold text-white shadow-[0_10px_30px_-8px_rgba(255,77,0,0.7)] transition-all duration-300 hover:-translate-y-0.5 hover:brightness-105;
   }
 
   .btn-glass {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/[0.07] px-7 py-3.5 text-sm font-semibold text-cream transition-all duration-300 hover:bg-white/[0.14] hover:-translate-y-0.5;
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-glass/15 bg-glass/[0.07] px-7 py-3.5 text-sm font-semibold text-fg transition-all duration-300 hover:bg-glass/[0.14] hover:-translate-y-0.5;
   }
 
   /* ----- Typography ----- */
@@ -123,6 +154,10 @@ body {
   .script-accent {
     @apply font-script text-orange-light;
   }
+  /* Texte en dégradé orange (titres) — nuances façon "short". */
+  .text-gradient-orange {
+    @apply bg-gradient-to-br from-orange-light via-orange to-orange-dark bg-clip-text text-transparent;
+  }
 
   .section-padding {
     @apply py-24 md:py-32;
@@ -130,6 +165,150 @@ body {
 
   .link-muted {
     @apply text-cream/60 transition-colors duration-200 hover:text-cream;
+  }
+}
+
+/* ============================================================
+   OVERRIDES THÈME CLAIR — cartes blanches, ombres douces,
+   header frosted blanc. Tout est sous .theme-light => retirer
+   la classe sur <html> restaure le thème sombre à l'identique.
+   ============================================================ */
+.theme-light .glass,
+.theme-light .glass-flat {
+  background: #ffffff;
+  border-color: rgba(17, 18, 26, 0.08);
+  box-shadow:
+    0 1px 2px rgba(17, 18, 26, 0.05),
+    0 14px 34px -18px rgba(17, 18, 26, 0.2);
+}
+
+.theme-light .glass-blur {
+  background: rgba(255, 255, 255, 0.72);
+  border-color: rgba(17, 18, 26, 0.08);
+  box-shadow: 0 8px 30px -10px rgba(17, 18, 26, 0.16);
+}
+
+.theme-light .glass-orange {
+  background:
+    linear-gradient(180deg, rgba(255, 122, 51, 0.12), rgba(255, 77, 0, 0.05)),
+    #ffffff;
+  border-color: rgba(255, 77, 0, 0.35);
+  box-shadow: 0 18px 44px -22px rgba(255, 77, 0, 0.45);
+}
+
+/* Le reflet spéculaire (blanc sur blanc) n'a pas de sens en clair. */
+.theme-light .glass-sheen::before {
+  opacity: 0;
+}
+
+/* Orange plus soutenu pour le contraste sur fond clair. */
+.theme-light .eyebrow {
+  color: #e63f00;
+  border-color: rgba(255, 77, 0, 0.35);
+}
+.theme-light .script-accent {
+  color: #ff4d00;
+}
+
+/* Titres en BLANC avec contour noir (style affiche) sur le thème clair.
+   paint-order : le contour passe derrière le remplissage pour rester net. */
+.theme-light .heading-xl,
+.theme-light .heading-lg,
+.theme-light .heading-md {
+  color: #ffffff;
+  -webkit-text-stroke: 1px #9aa1ab; /* gris métallique, discret */
+  paint-order: stroke fill;
+  text-shadow: 0 1px 7px rgba(20, 22, 30, 0.12);
+}
+/* L'accent en dégradé orange garde sa couleur, sans contour. */
+.theme-light .heading-xl .text-gradient-orange,
+.theme-light .heading-lg .text-gradient-orange,
+.theme-light .heading-md .text-gradient-orange {
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+}
+
+/* Halo orange large et doux façon "short" : bloom derrière le hero (haut)
+   + nuances latérales, sur le fond gris clair. */
+/* Dégradé orange large et aéré façon "short" : couleur dans les coins,
+   centre plus clair, transitions très douces qui enveloppent le hero. */
+.theme-light .aurora-bg {
+  background:
+    /* coins du HAUT */
+    radial-gradient(
+      54% 48% at 90% 5%,
+      rgba(255, 85, 15, 0.5),
+      transparent 66%
+    ),
+    radial-gradient(
+      52% 46% at 7% 4%,
+      rgba(255, 115, 45, 0.44),
+      transparent 64%
+    ),
+    radial-gradient(
+      100% 70% at 50% -18%,
+      rgba(255, 150, 80, 0.32),
+      transparent 68%
+    ),
+    /* coins du BAS qui remontent vers le centre */
+    radial-gradient(
+      56% 52% at 5% 100%,
+      rgba(255, 100, 30, 0.42),
+      transparent 66%
+    ),
+    radial-gradient(
+      56% 52% at 95% 98%,
+      rgba(255, 85, 15, 0.4),
+      transparent 66%
+    ),
+    radial-gradient(
+      85% 58% at 50% 122%,
+      rgba(255, 140, 70, 0.28),
+      transparent 68%
+    );
+}
+
+/* La boule de verre décorative n'a de sens que sur le thème sombre. */
+.theme-light .hero-orb {
+  display: none;
+}
+
+/* Halo orange localisé derrière une section (Packs, Contact...). Défile avec
+   la section, contrairement à l'aura globale fixe. Fonctionne dans les 2 thèmes. */
+.section-glow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(44% 64% at 0% 55%, rgba(255, 90, 20, 0.2), transparent 62%),
+    radial-gradient(
+      46% 66% at 100% 42%,
+      rgba(255, 122, 51, 0.2),
+      transparent 62%
+    ),
+    radial-gradient(
+      60% 52% at 50% 118%,
+      rgba(255, 120, 50, 0.16),
+      transparent 64%
+    );
+}
+
+/* Lueur orange du logo "aA." (header + footer). */
+.logo-glow {
+  filter: drop-shadow(0 0 9px rgba(255, 77, 0, 0.5))
+    drop-shadow(0 0 20px rgba(255, 90, 20, 0.32));
+  animation: logoGlow 4.5s ease-in-out infinite;
+}
+@keyframes logoGlow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 8px rgba(255, 77, 0, 0.42))
+      drop-shadow(0 0 16px rgba(255, 90, 20, 0.26));
+  }
+  50% {
+    filter: drop-shadow(0 0 13px rgba(255, 77, 0, 0.62))
+      drop-shadow(0 0 28px rgba(255, 90, 20, 0.42));
   }
 }
 
@@ -170,7 +349,8 @@ body {
   .animate-marquee,
   .animate-marquee-rev,
   .animate-float,
-  .animate-glow-pulse {
+  .animate-glow-pulse,
+  .logo-glow {
     animation: none !important;
   }
   html {

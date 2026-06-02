@@ -62,7 +62,8 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`${inter.variable} ${anton.variable} ${caveat.variable}`}
+      // 🎨 Thème CLAIR actif (test). Pour revenir au SOMBRE : retirer "theme-light".
+      className={`${inter.variable} ${anton.variable} ${caveat.variable} theme-light`}
     >
       <body className="font-sans">
         <div className="aurora-bg" aria-hidden />

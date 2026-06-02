@@ -9,16 +9,19 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Identité Artémys
+        // Identité Artémys — l'orange ne change pas selon le thème.
         orange: {
           DEFAULT: "#FF4D00",
           light: "#FF7A33",
           dark: "#E63F00",
         },
-        ink: "#0A0A0C",
-        "ink-soft": "#16161A",
-        cream: "#FBF2E6",
-        "cream-dark": "#F2E6D4",
+        // Tokens sémantiques pilotés par variables CSS (valeurs dans globals.css).
+        // Permet de basculer sombre <-> clair via une seule classe sur <html>.
+        bg: "rgb(var(--bg) / <alpha-value>)",
+        ink: "rgb(var(--bg) / <alpha-value>)", // alias : bg-ink = fond de page
+        fg: "rgb(var(--fg) / <alpha-value>)",
+        cream: "rgb(var(--fg) / <alpha-value>)", // alias : text-cream = premier plan
+        glass: "rgb(var(--glass) / <alpha-value>)", // teinte surfaces/bordures
       },
       fontFamily: {
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],

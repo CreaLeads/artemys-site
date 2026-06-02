@@ -1,5 +1,5 @@
 import { Logo } from "@/components/ui/Logo";
-import { COMPANY, NAV_LINKS } from "@/lib/constants";
+import { COMPANY, NAV_LINKS, PARTNERS } from "@/lib/constants";
 
 export function Footer() {
   return (
@@ -61,11 +61,39 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-xs text-cream/40 sm:flex-row">
-          <p>
-            © {new Date().getFullYear()} {COMPANY.brandName}. Tous droits réservés.
+        <div className="mt-10 border-t border-glass/10 pt-6">
+          <p className="text-center text-sm text-cream/60">
+            En partenariat avec{" "}
+            <a
+              href={PARTNERS.crealeadsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-orange transition-opacity hover:opacity-80"
+            >
+              CreaLeads
+            </a>{" "}
+            et{" "}
+            {PARTNERS.atelierMlmUrl ? (
+              <a
+                href={PARTNERS.atelierMlmUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-orange transition-opacity hover:opacity-80"
+              >
+                Atelier MLM
+              </a>
+            ) : (
+              <span className="font-semibold text-cream/80">Atelier MLM</span>
+            )}
+            .
           </p>
-          <p>{COMPANY.slogan}</p>
+          <div className="mt-5 flex flex-col items-center justify-between gap-3 text-xs text-cream/40 sm:flex-row">
+            <p>
+              © {new Date().getFullYear()} {COMPANY.brandName}. Tous droits
+              réservés.
+            </p>
+            <p>{COMPANY.slogan}</p>
+          </div>
         </div>
       </div>
     </footer>

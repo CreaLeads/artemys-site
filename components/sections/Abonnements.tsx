@@ -26,7 +26,7 @@ export function Abonnements() {
         <Reveal className="mx-auto max-w-2xl text-center">
           <span className="eyebrow">Abonnements Artémys</span>
           <h2 className="heading-lg mt-5">
-            Votre studio créa <span className="text-orange">en abonnement</span>
+            Votre studio créa <span className="text-gradient-orange">en abonnement</span>
           </h2>
           <p className="mt-4 text-cream/70">
             Un designer dédié et une communication qui tourne chaque mois — sans
@@ -59,12 +59,12 @@ export function Abonnements() {
                   <span className="mb-1 text-sm text-cream/60">{plan.period}</span>
                 </div>
                 {plan.note && (
-                  <span className="mt-2 inline-flex w-fit rounded-full border border-white/15 px-3 py-1 text-xs text-cream/70">
+                  <span className="mt-2 inline-flex w-fit rounded-full border border-glass/15 px-3 py-1 text-xs text-cream/70">
                     {plan.note}
                   </span>
                 )}
 
-                <ul className="mt-6 flex-1 space-y-3 border-t border-white/10 pt-6">
+                <ul className="mt-6 flex-1 space-y-3 border-t border-glass/10 pt-6">
                   {plan.includes.map((item) => (
                     <li key={item} className="flex gap-3 text-sm text-cream/85">
                       <Check />
@@ -76,7 +76,7 @@ export function Abonnements() {
                 <p className="mt-6 text-xs italic text-cream/50">{plan.ideal}</p>
 
                 <a
-                  href="#contact"
+                  href="/#contact"
                   className={`mt-5 ${plan.featured ? "btn-primary" : "btn-glass"} w-full`}
                 >
                   Choisir {plan.name}

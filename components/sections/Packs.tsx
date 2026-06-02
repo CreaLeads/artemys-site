@@ -21,12 +21,13 @@ function Check() {
 
 export function Packs() {
   return (
-    <section id="packs" className="section-padding">
+    <section id="packs" className="section-padding relative overflow-hidden">
+      <div className="section-glow" aria-hidden />
       <div className="container-custom">
         <Reveal className="mx-auto max-w-2xl text-center">
           <span className="eyebrow">Art&amp;Packs</span>
           <h2 className="heading-lg mt-5">
-            Des packs <span className="text-orange">clés en main</span>
+            Des packs <span className="text-gradient-orange">clés en main</span>
           </h2>
           <p className="mt-4 text-cream/70">
             Une image complète et cohérente, sans avoir à choisir prestation par
@@ -61,7 +62,7 @@ export function Packs() {
                   {pack.description}
                 </p>
 
-                <ul className="mt-6 flex-1 space-y-3 border-t border-white/10 pt-6">
+                <ul className="mt-6 flex-1 space-y-3 border-t border-glass/10 pt-6">
                   {pack.includes.map((item) => (
                     <li key={item} className="flex gap-3 text-sm text-cream/85">
                       <Check />
@@ -70,7 +71,7 @@ export function Packs() {
                   ))}
                 </ul>
 
-                <p className="mt-6 rounded-2xl bg-white/[0.05] px-4 py-3 text-center text-xs font-semibold text-orange-light">
+                <p className="mt-6 rounded-2xl bg-glass/[0.05] px-4 py-3 text-center text-xs font-semibold text-orange-light">
                   🎁 {pack.bonus}
                 </p>
 
