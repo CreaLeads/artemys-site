@@ -25,9 +25,9 @@ function Row({ reverse = false }: { reverse?: boolean }) {
         {items.map((name, i) => (
           <div
             key={`${name}-${i}`}
-            className="glass-flat flex h-20 shrink-0 items-center justify-center whitespace-nowrap rounded-2xl !border-orange/50 px-8"
+            className="glass-flat flex h-20 shrink-0 items-center justify-center whitespace-nowrap rounded-2xl px-8"
           >
-            <span className="font-display text-xl uppercase tracking-wide text-cream/75">
+            <span className="text-outline-orange font-display text-xl uppercase tracking-wide text-cream/80">
               {name}
             </span>
           </div>

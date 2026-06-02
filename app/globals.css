@@ -158,6 +158,11 @@ body {
   .text-gradient-orange {
     @apply bg-gradient-to-br from-orange-light via-orange to-orange-dark bg-clip-text text-transparent;
   }
+  /* Contour orange autour des lettres (noms clients du bandeau). */
+  .text-outline-orange {
+    -webkit-text-stroke: 1px #ff4d00;
+    paint-order: stroke fill;
+  }
 
   .section-padding {
     @apply py-24 md:py-32;
