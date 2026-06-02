@@ -91,7 +91,11 @@ export function References() {
           <>
             <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
               {shown.map((t, i) => (
-                <Reveal key={i} delay={(i % 3) * 0.08}>
+                <Reveal
+                  key={i}
+                  delay={(i % 3) * 0.08}
+                  className={!showAll && i === 2 ? "hidden md:block" : ""}
+                >
                   <figure className="glass glass-sheen h-full rounded-3xl p-7">
                     <div className="mb-3 text-lg">
                       <Stars n={t.rating ?? 5} />
@@ -113,9 +117,7 @@ export function References() {
                   onClick={() => setShowAll((v) => !v)}
                   className="btn-glass"
                 >
-                  {showAll
-                    ? "Voir moins"
-                    : `Voir plus d'avis (+${TESTIMONIALS.length - 3})`}
+                  {showAll ? "Voir moins" : "Voir plus d'avis"}
                 </button>
               </div>
             )}
