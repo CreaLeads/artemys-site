@@ -31,19 +31,41 @@ export function Contact() {
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
-    const data = Object.fromEntries(new FormData(form).entries());
+    const fd = new FormData(form);
     setStatus("sending");
     try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) throw new Error("bad status");
-      setStatus("ok");
-      form.reset();
-      setSubject(BESOIN.pack);
-      setMessage("");
+      // Appel direct à FormSubmit depuis le navigateur : le vrai en-tête Origin
+      // est envoyé par le navigateur (impossible côté serveur) → fiable.
+      const res = await fetch(
+        `https://formsubmit.co/ajax/${encodeURIComponent(COMPANY.email)}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            _subject: `Nouvelle demande site — ${fd.get("subject") || "Contact"}`,
+            _template: "table",
+            _captcha: "false",
+            Nom: fd.get("name"),
+            Entreprise: fd.get("company") || "—",
+            Email: fd.get("email"),
+            Téléphone: fd.get("phone") || "—",
+            Besoin: fd.get("subject") || "—",
+            Message: fd.get("message") || "—",
+          }),
+        },
+      );
+      const data = await res.json().catch(() => null);
+      if (data && (data.success === "true" || data.success === true)) {
+        setStatus("ok");
+        form.reset();
+        setSubject(BESOIN.pack);
+        setMessage("");
+      } else {
+        setStatus("error");
+      }
     } catch {
       setStatus("error");
     }
