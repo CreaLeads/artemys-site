@@ -1,17 +1,18 @@
 import { NextResponse } from "next/server";
 
 /**
- * Réception du formulaire de contact → envoi de l'email vers Artémys.
- *
- * On relaie la demande à FormSubmit (https://formsubmit.co) qui transfère
- * le message à l'adresse ci-dessous. Aucune clé API à stocker.
+ * Réception du formulaire de contact → envoi de l'email vers Artémys via
+ * FormSubmit (https://formsubmit.co). Aucune clé API à stocker.
  *
  * ⚠️ ACTIVATION (une seule fois) : au tout premier envoi, FormSubmit envoie
- * un email de confirmation à contact.artemys@gmail.com avec un lien
- * "Activate". Une fois ce lien cliqué, tous les messages suivants arrivent
- * directement dans la boîte.
+ * un email "Activate Form" à contact.artemys@gmail.com. Une fois ce lien
+ * cliqué, tous les messages suivants arrivent directement dans la boîte.
+ *
+ * Note : FormSubmit rejette les appels sans en-têtes Origin/Referer
+ * ("open this page through a web server") — on les fournit donc explicitement.
  */
 const CONTACT_EMAIL = "contact.artemys@gmail.com";
+const FALLBACK_ORIGIN = "https://www.xn--artmys-dva.fr";
 
 export async function POST(req: Request) {
   try {
@@ -25,6 +26,8 @@ export async function POST(req: Request) {
       );
     }
 
+    const origin = req.headers.get("origin") || FALLBACK_ORIGIN;
+
     const res = await fetch(
       `https://formsubmit.co/ajax/${encodeURIComponent(CONTACT_EMAIL)}`,
       {
@@ -32,6 +35,8 @@ export async function POST(req: Request) {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
+          Origin: origin,
+          Referer: `${origin}/`,
         },
         body: JSON.stringify({
           _subject: `Nouvelle demande site — ${subject || "Contact"}`,
@@ -48,16 +53,20 @@ export async function POST(req: Request) {
     );
 
     const data = await res.json().catch(() => null);
+    const success = data?.success === "true" || data?.success === true;
+    const needsActivation = /activat/i.test(data?.message ?? "");
 
-    if (!res.ok || (data && data.success === "false")) {
-      console.error("[contact Artémys] FormSubmit a échoué", res.status, data);
-      return NextResponse.json(
-        { ok: false, error: "Envoi impossible pour le moment." },
-        { status: 502 },
-      );
+    // On considère "ok" un envoi réussi OU le 1er envoi en attente d'activation
+    // (l'email d'activation part vers la boîte ; les messages suivront).
+    if (res.ok && (success || needsActivation)) {
+      return NextResponse.json({ ok: true });
     }
 
-    return NextResponse.json({ ok: true });
+    console.error("[contact Artémys] FormSubmit a échoué", res.status, data);
+    return NextResponse.json(
+      { ok: false, error: "Envoi impossible pour le moment." },
+      { status: 502 },
+    );
   } catch (err) {
     console.error("[contact Artémys] erreur", err);
     return NextResponse.json(
