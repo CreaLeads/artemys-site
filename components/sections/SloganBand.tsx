@@ -15,7 +15,7 @@ export function SloganBand() {
               <span className="text-gradient-orange">on vous rend irrésistible.</span>
             </h2>
             <div className="relative mt-9 flex flex-wrap justify-center gap-3">
-              <a href="#contact" className="btn-primary">
+              <a href="/?besoin=autre#contact" className="btn-primary">
                 Démarrer mon projet
               </a>
               <a href={`tel:${COMPANY.phoneRaw}`} className="btn-glass">

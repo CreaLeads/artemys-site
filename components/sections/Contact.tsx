@@ -1,13 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { COMPANY } from "@/lib/constants";
 import { Reveal } from "@/components/ui/Reveal";
 
 type Status = "idle" | "sending" | "ok" | "error";
 
+// Libellés du menu "Votre besoin" (clé = paramètre d'URL ?besoin=).
+const BESOIN: Record<string, string> = {
+  pack: "Un pack (Start / Premium / 360°)",
+  abonnement: "Un abonnement (Infinity / Pro / Ultra)",
+  presta: "Une prestation à la carte",
+  autre: "Autre / je ne sais pas encore",
+};
+
 export function Contact() {
   const [status, setStatus] = useState<Status>("idle");
+  const [subject, setSubject] = useState(BESOIN.pack);
+  const [message, setMessage] = useState("");
+
+  // Pré-remplissage depuis l'URL : /?besoin=pack&item=Pack%20Premium#contact
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const besoin = params.get("besoin");
+    const item = params.get("item");
+    if (besoin && BESOIN[besoin]) setSubject(BESOIN[besoin]);
+    if (item) setMessage(`Bonjour, je suis intéressé(e) par : ${item}.`);
+  }, []);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -23,6 +42,8 @@ export function Contact() {
       if (!res.ok) throw new Error("bad status");
       setStatus("ok");
       form.reset();
+      setSubject(BESOIN.pack);
+      setMessage("");
     } catch {
       setStatus("error");
     }
@@ -88,12 +109,22 @@ export function Contact() {
                 </label>
                 <select
                   name="subject"
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
                   className="w-full rounded-2xl border border-glass/15 bg-glass/[0.06] px-4 py-3 text-cream outline-none transition focus:border-orange"
                 >
-                  <option className="bg-ink">Un pack (Start / Premium / 360°)</option>
-                  <option className="bg-ink">Un abonnement (Infinity / Pro / Ultra)</option>
-                  <option className="bg-ink">Une prestation à la carte</option>
-                  <option className="bg-ink">Autre / je ne sais pas encore</option>
+                  <option className="bg-ink" value={BESOIN.pack}>
+                    Un pack (Start / Premium / 360°)
+                  </option>
+                  <option className="bg-ink" value={BESOIN.abonnement}>
+                    Un abonnement (Infinity / Pro / Ultra)
+                  </option>
+                  <option className="bg-ink" value={BESOIN.presta}>
+                    Une prestation à la carte
+                  </option>
+                  <option className="bg-ink" value={BESOIN.autre}>
+                    Autre / je ne sais pas encore
+                  </option>
                 </select>
               </div>
               <div>
@@ -103,6 +134,8 @@ export function Contact() {
                 <textarea
                   name="message"
                   rows={4}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
                   className="w-full resize-none rounded-2xl border border-glass/15 bg-glass/[0.06] px-4 py-3 text-cream outline-none transition placeholder:text-cream/30 focus:border-orange"
                   placeholder="Décrivez votre projet en quelques mots…"
                 />

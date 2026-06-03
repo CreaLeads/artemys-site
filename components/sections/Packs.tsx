@@ -76,7 +76,7 @@ export function Packs() {
                 </p>
 
                 <a
-                  href="#contact"
+                  href={`/?besoin=pack&item=${encodeURIComponent(pack.name)}#contact`}
                   className={`mt-6 ${pack.featured ? "btn-primary" : "btn-glass"} w-full`}
                 >
                   Demander ce pack

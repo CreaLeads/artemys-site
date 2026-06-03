@@ -121,7 +121,10 @@ export function Prestations() {
         </div>
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <a href="/#contact" className="btn-primary">
+          <a
+            href={`/?besoin=presta&item=${encodeURIComponent(current.title)}#contact`}
+            className="btn-primary"
+          >
             Demander un devis
           </a>
           <a

@@ -76,7 +76,7 @@ export function Abonnements() {
                 <p className="mt-6 text-xs italic text-cream/50">{plan.ideal}</p>
 
                 <a
-                  href="/#contact"
+                  href={`/?besoin=abonnement&item=${encodeURIComponent("Abonnement " + plan.name)}#contact`}
                   className={`mt-5 ${plan.featured ? "btn-primary" : "btn-glass"} w-full`}
                 >
                   Choisir {plan.name}
